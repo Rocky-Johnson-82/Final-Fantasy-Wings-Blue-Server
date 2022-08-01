@@ -1,0 +1,11 @@
+-----------------------------------
+-- Area: Upper Delkfutt's Tower
+--  Mob: Dire Bat
+-----------------------------------
+require("scripts/globals/regimes")
+-----------------------------------
+
+function onMobDeath(mob, player, isKiller)
+    tpz.regime.checkRegime(player, mob, 786, 3, tpz.regime.type.GROUNDS)
+    tpz.regime.checkRegime(player, mob, 787, 3, tpz.regime.type.GROUNDS)
+end

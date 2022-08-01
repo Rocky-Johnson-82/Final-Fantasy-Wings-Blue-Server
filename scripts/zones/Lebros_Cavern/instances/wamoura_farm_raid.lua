@@ -1,0 +1,63 @@
+-----------------------------------
+--
+-- Assault: Wamoura Farm Raid
+--
+-----------------------------------
+local ID = require("scripts/zones/Lebros_Cavern/IDs")
+-----------------------------------
+
+function afterInstanceRegister(player)
+    local instance = player:getInstance()
+    player:messageSpecial(ID.text.ASSAULT_27_START, 27)
+    player:messageSpecial(ID.text.TIME_TO_COMPLETE, instance:getTimeLimit())
+end
+
+function onInstanceCreated(instance)
+
+    for i, v in pairs(ID.mob[27]) do
+        SpawnMob(v, instance)
+    end
+
+end
+
+function onInstanceTimeUpdate(instance, elapsed)
+    updateInstanceTime(instance, elapsed, ID.text)
+end
+
+function onInstanceFailure(instance)
+
+    local chars = instance:getChars()
+
+    for i, v in pairs(chars) do
+        v:messageSpecial(ID.text.MISSION_FAILED, 10, 10)
+        v:startEvent(102)
+    end
+end
+
+function onInstanceProgressUpdate(instance, progress)
+
+    if (progress >= 15) then
+        instance:complete()
+    end
+
+end
+
+function onInstanceComplete(instance)
+
+    local chars = instance:getChars()
+
+    for i, v in pairs(chars) do
+        v:messageSpecial(ID.text.RUNE_UNLOCKED, 7, 8)
+    end
+
+    local rune = GetNPCByID(ID.npc.RUNE_OF_RELEASE, instance)
+    local box = GetNPCByID(ID.npc.ANCIENT_LOCKBOX, instance)
+    rune:setPos(414.29, -40.64, 301.523, 247)
+    rune:setStatus(tpz.status.NORMAL)
+    box:setPos(410.41, -41.12, 300.743, 243)
+    box:setStatus(tpz.status.NORMAL)
+
+end
+
+function onEventUpdate(player, csid, option)
+end

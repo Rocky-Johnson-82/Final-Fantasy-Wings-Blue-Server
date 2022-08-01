@@ -1,0 +1,49 @@
+-----------------------------------
+--
+-- Zone: Ordelles Caves (193)
+--
+-----------------------------------
+local ID = require("scripts/zones/Ordelles_Caves/IDs")
+require("scripts/globals/conquest")
+require("scripts/globals/treasure")
+require("scripts/globals/zone")
+-----------------------------------
+
+function onInitialize(zone)
+    
+    local morbolger_respawn = GetServerVariable("Morbolger_Respawn")
+	if os.time() < morbolger_respawn then
+		GetMobByID(ID.mob.MORBOLGER):setRespawnTime(morbolger_respawn - os.time())
+	else
+		SpawnMob(ID.mob.MORBOLGER)
+    end
+
+    tpz.treasure.initZone(zone)
+end
+
+function onZoneIn(player, prevZone)
+    local cs = -1
+    if player:getXPos() == 0 and player:getYPos() == 0 and player:getZPos() == 0 then
+        player:setPos(-76.839, -1.696, 659.969, 122)
+    end
+    if prevZone == tpz.zone.LA_THEINE_PLATEAU and player:getCharVar("darkPuppetCS") == 1 then
+        cs = 10
+    end
+    return cs
+end
+
+function onConquestUpdate(zone, updatetype)
+    tpz.conq.onConquestUpdate(zone, updatetype)
+end
+
+function onRegionEnter(player, region)
+end
+
+function onEventUpdate(player, csid, option)
+end
+
+function onEventFinish(player, csid, option)
+    if csid == 10 then
+        player:setCharVar("darkPuppetCS", 2)
+    end
+end

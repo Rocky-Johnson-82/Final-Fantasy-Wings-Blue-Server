@@ -1,0 +1,18 @@
+-----------------------------------
+-- Ability: Fealty
+-- Grants a powerful resistance to enfeebling magic.
+-- Obtained: Paladin Level 75
+-- Recast Time: 0:20:00
+-- Duration: 0:01:00
+-----------------------------------
+require("scripts/globals/settings")
+require("scripts/globals/status")
+-----------------------------------
+
+function onAbilityCheck(player, target, ability)
+    return 0, 0
+end
+
+function onUseAbility(player, target, ability, action)
+    player:addStatusEffect(tpz.effect.FEALTY, 1, 0, 60)
+end

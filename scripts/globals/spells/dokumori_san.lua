@@ -1,0 +1,52 @@
+-----------------------------------------
+-- Spell: Dokumori: San
+-----------------------------------------
+require("scripts/globals/status")
+require("scripts/globals/magic")
+require("scripts/globals/msg")
+-----------------------------------------
+
+function onMagicCastingCheck(caster, target, spell)
+    return 0
+end
+
+function onSpellCast(caster, target, spell)
+
+    if target:getMod(tpz.mod.STATUSRES) >= 100 or target:getMod(tpz.mod.POISONRES) >= 100 then
+        spell:setMsg(tpz.msg.basic.MAGIC_NO_EFFECT)
+        return tpz.effect.POISON
+    end
+    
+    local effect = tpz.effect.POISON
+    -- Base Stats
+    local dINT = (caster:getStat(tpz.mod.INT) - target:getStat(tpz.mod.INT))
+    --Duration Calculation
+    local duration = 360
+    local params = {}
+    params.attribute = tpz.mod.INT
+    params.skillType = tpz.skill.NINJUTSU
+    params.bonus = 0
+    duration = duration * applyResistance(caster, target, spell, params)
+    local power = 20
+
+    --Calculates resist chanve from Reist Blind
+    if (target:hasStatusEffect(effect)) then
+        spell:setMsg(tpz.msg.basic.MAGIC_NO_EFFECT) -- no effect
+        return effect
+    end
+
+    if (math.random(0, 100) >= target:getMod(tpz.mod.POISONRES)) then
+        if (duration >= 120) then
+            if (target:addStatusEffect(effect, power, 3, duration)) then
+                spell:setMsg(tpz.msg.basic.MAGIC_ENFEEB_IS)
+            else
+                spell:setMsg(tpz.msg.basic.MAGIC_NO_EFFECT)
+            end
+        else
+            spell:setMsg(tpz.msg.basic.MAGIC_RESIST)
+        end
+    else
+        spell:setMsg(tpz.msg.basic.MAGIC_RESIST_2)
+    end
+    return effect
+end

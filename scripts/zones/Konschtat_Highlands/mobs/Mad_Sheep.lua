@@ -1,0 +1,17 @@
+-----------------------------------
+-- Area: Konschtat Highlands
+--  Mob: Mad Sheep
+-- Note: Place holder Stray Mary
+-----------------------------------
+local ID = require("scripts/zones/Konschtat_Highlands/IDs")
+require("scripts/globals/mobs")
+require("scripts/quests/tutorial")
+-----------------------------------
+
+function onMobDeath(mob, player, isKiller)
+    tpz.tutorial.onMobDeath(player)
+end
+
+function onMobDespawn(mob)
+    tpz.mob.phOnDespawn(mob, ID.mob.STRAY_MARY_PH, 5, 300) -- 5-60 minutes
+end
